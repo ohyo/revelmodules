@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/ohyo/revelmodules/blog/app/models"
 	"github.com/revel/revel"
-	"ohyo.network/modules/blog/app/models"
 )
 
 func init() {

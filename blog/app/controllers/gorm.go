@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/ohyo/revelmodules/blog/app/models"
 	"github.com/revel/revel"
 	"golang.org/x/crypto/bcrypt"
-	"ohyo.network/modules/blog/app/models"
 )
 
 var (

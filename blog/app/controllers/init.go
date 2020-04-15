@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/revel/revel"
-	"ohyo.network/modules/blog/app/models"	
+	"github.com/ohyo/revelmodules/blog/app/models"	
 )
 
 func (ctrl *App) setCurrentUser() revel.Result {
@@ -13,7 +13,7 @@ func (ctrl *App) setCurrentUser() revel.Result {
 	ctrl.ViewArgs["moreStyles"] = []interface{}{}
 	ctrl.ViewArgs["moreScripts"] = []interface{}{}
 	ctrl.ViewArgs["RunMode"] = revel.RunMode
-	
+
 	defer func() {
 		log.Info("start " + ctrl.Action)
 
@@ -42,7 +42,7 @@ func (ctrl *App) setCurrentUser() revel.Result {
 			ctrl.CurrentUser = &user
 		}
 	}
-	
+
 	return nil
 }
 

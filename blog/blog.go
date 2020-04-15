@@ -1,10 +1,10 @@
 package blog
 
 import (
-	"ohyo.network/modules/blog/app/models"
+	"github.com/ohyo/revelmodules/blog/app/models"
 	"github.com/revel/revel"
 )
- 	
+
 // StorageInterface is
 // use makeSlug for slugging, i.e. scale-golang-applications
 type StorageInterface interface {
@@ -13,7 +13,7 @@ type StorageInterface interface {
 	GetUser(ctrl revel.Controller)
 	// ListPosts get the list of posts for the user by slug and page
 	// if no user slug so it return post ordered by create date
-    ListPosts(userSlug string, page int) []*models.Post
+	ListPosts(userSlug string, page int) []*models.Post
 	GetPost(userSlug string, postSlug string) *models.Post
 	// SavePost is save post. If there no id so it create new post, otherwise it update it
 	SavePost(post models.Post)
@@ -23,7 +23,6 @@ type StorageInterface interface {
 	SaveComment(postSlug string, post models.Comment)
 	// RemoveComment is remove the comment using postSlug and commentID. Both params required
 	RemoveComment(postSlug string, commentID string)
-	
 }
 
 // Storage interface

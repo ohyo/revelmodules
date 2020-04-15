@@ -3,7 +3,7 @@ package controllers
 import (
 	"golang.org/x/crypto/bcrypt"
 	"github.com/revel/revel"
-	"ohyo.network/modules/blog/app/models"
+	"github.com/ohyo/revelmodules/blog/app/models"
 )
 
 // User is

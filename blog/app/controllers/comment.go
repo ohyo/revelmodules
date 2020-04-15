@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/revel/revel"
-	"ohyo.network/modules/blog/app/models"
-	"ohyo.network/modules/blog/app/routes"
+	"github.com/ohyo/revelmodules/blog/app/models"
+	"github.com/ohyo/revelmodules/blog/app/routes"
 )
 
 // Comment is
@@ -17,7 +17,7 @@ func (ctrl Comment) CheckUser() revel.Result {
 		return nil
 	}
 
-	if ctrl.CurrentUser == nil { 
+	if ctrl.CurrentUser == nil {
 		ctrl.Flash.Error("Please log in first")
 		return ctrl.Redirect(BlogUser.Login)
 	}

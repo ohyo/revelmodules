@@ -3,8 +3,8 @@ package controllers
 import (
 	"github.com/revel/revel"
 	"github.com/russross/blackfriday"
-	"ohyo.network/modules/blog/app/models"
-	"ohyo.network/modules/blog/app/routes"
+	"github.com/ohyo/revelmodules/blog/app/models"
+	"github.com/ohyo/revelmodules/blog/app/routes"
 	"html/template"
 	"fmt"
 )
@@ -16,7 +16,7 @@ type Post struct {
 
 // CheckUser is
 func (ctrl Post) CheckUser() revel.Result {
-	
+
 	ctrl.ViewArgs["ctrl"] = ctrl
 	ctrl.ViewArgs["title"] = "ooops"
 	ctrl.ViewArgs["Title"] = "ooops"
