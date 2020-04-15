@@ -1,0 +1,13 @@
+{{range comment := .post.Comments }}
+<p>
+  <b><mark>{{.Commenter}}</mark> :</b>
+  {{.Body}}
+  <small class="text-muted">
+    ({{.CreatedAt}})
+  </small>
+  {{if isset(.currentUser)}}
+  <!-- isAdmin-->
+  <a href="{{ .Comment.Destroy .post.ID .ID}}" class="btn btn-link btn-sm">Destroy</a>
+  {{end}}
+</p>
+{{end}}

@@ -1,0 +1,61 @@
+<style type="text/css">
+	#sidebar {
+		background-color: #eee;
+		border: thin solid #ddd;
+		padding: 10px;
+        margin: 15px 0 0 0;
+	}
+	#toggleSidebar {
+        color: #555;
+        float: right;
+        margin-top: 10px;
+	}
+
+</style>
+
+<div class="container">
+    <div id="sidebar" style="display:none;">
+    	<h4>Available pipelines</h4>
+    	<dl>
+    	{{ range $index, $value := .}}
+    		<dt>{{$index}}</dt>
+    		<dd>{{$value}}</dd>
+    	{{end}}
+    	</dl>
+    	<h4>Flash</h4>
+    	<dl>
+    	{{ range $index, $value := .flash}}
+    		<dt>{{$index}}</dt>
+    		<dd>{{$value}}</dd>
+    	{{end}}
+    	</dl>
+
+    	<h4>Errors</h4>
+    	<dl>
+    	{{ range $index, $value := .errors}}
+    		<dt>{{$index}}</dt>
+    		<dd>{{$value}}</dd>
+    	{{end}}
+    	</dl>
+    </div>
+    <a id="toggleSidebar" href="#" class="toggles"><i class="fa fa-bug"></i>Debug info</a>
+</div>
+
+<script>
+	$sidebar = 0;
+	$('#toggleSidebar').click(function() {
+		if ($sidebar === 1) {
+			$('#sidebar').hide();
+			$('#toggleSidebar i').addClass('icon-chevron-left');
+			$('#toggleSidebar i').removeClass('icon-chevron-right');
+			$sidebar = 0;
+		}
+		else {
+			$('#sidebar').show();
+			$('#toggleSidebar i').addClass('icon-chevron-right');
+			$('#toggleSidebar i').removeClass('icon-chevron-left');
+			$sidebar = 1;
+		}
+        return false;
+	});
+</script>

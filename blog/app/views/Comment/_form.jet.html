@@ -1,0 +1,23 @@
+<form class="form-horizontal" method="POST" action="{{ юComment.Create .post.ID}}">
+  <div class="form-group">
+    {{field := field["commenter"]}}
+    <label class="col-xs-2 control-label" for="commenter"><small>Name</small></label>
+    <div class="col-xs-10">
+      <input type="text" class="form-control" id="commenter" name="{{ .field.Name }}" placeholder="Commenter" />
+    </div>
+
+  </div>
+  <div class="form-group">
+    {{field := field["body"]}}
+    <label class="col-xs-2 control-label" for="body"><small>Body</small></label>
+    <div class="col-xs-10">
+      <input type="text" class="form-control" id="body" name="{{ .field.Name}}" placeholder="Body" />
+    </div>
+
+  </div>
+  <div class="form-group">
+    <div class="col-xs-offset-2 col-xs-10">
+      <button type="submit" class="btn btn-default">Add comment</button>
+    </div>
+  </div>
+</form>

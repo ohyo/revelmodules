@@ -1,0 +1,71 @@
+{{set . "title" .pageName}}
+{{template "header.html" .}}
+
+<div class="page-header clearfix">
+    <a href="/page/{{urlencode .pageName}}" class="btn btn-default btn-sm btn-back"><i class="fa fa-arrow-left"></i></a>
+    <h1>Revisions: {{.pageName}}</h1>
+    {{template "Page/actions.html" .}}
+</div>
+
+{{template "flash.html" .}}
+
+{{if gt .revisionSize 0}}
+<div class="row">
+    <div class="col-md-4">
+        <table class="table table-hover table-revisions">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Modified</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{$revisionSize := .revisionSize}}
+                {{$pageName := .pageName}}
+                {{range $i, $revision := .revisions}}
+                <tr data-href="/page/{{urlencode $pageName}}/diff/{{.Id}}" class="show-diff">
+                    <td>{{subtract $revisionSize $i}}</td>
+                    <td>
+                        {{date "2006-01-02 15:04" .CreatedAt}}
+                        {{if gt .AddedLines 0}}
+                        <span class="label label-success">+{{.AddedLines}}</span>
+                        {{end}}
+                        {{if gt .DeletedLines 0}}
+                        {{if gt (subtract $revisionSize $i) 1}}
+                        <span class="label label-danger">-{{.DeletedLines}}</span>
+                        {{end}}
+                        {{end}}
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-8">
+        <div class="diff">
+        </div>
+    </div>
+</div>
+{{else}}
+<h3>This page does not have revisions.</h3>
+{{end}}
+
+<script>
+$(function () {
+    $('.show-diff td').click(function () {
+        var tr = $(this).parents('tr');
+        console.log(tr);
+        $('.table-revisions .show-diff').removeClass('active');
+        tr.addClass('active');
+        $('.diff').load(
+            tr.attr('data-href') + ' .diff-content',
+            function () {
+                $('body').trigger('modified');
+            }
+        );
+    });
+    $('.show-diff:first-child td:first-child').click();
+});
+</script>
+
+{{template "footer.html" .}}

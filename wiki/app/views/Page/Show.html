@@ -1,0 +1,79 @@
+{{set . "title" .pageName}}
+{{template "header.html" .}}
+
+<div class="page-header clearfix">
+    <h1>
+        {{if ne .pageName "Home"}}
+        <a href="/" class="btn btn-default btn-sm btn-back"><i class="fa fa-arrow-left"></i></a>
+        {{end}}
+        {{.pageName}}
+    </h1>
+    {{template "Page/actions.html" .}}
+</div>
+
+{{template "flash.html" .}}
+
+<div class="row">
+    <div class="col-md-9 col-sm-8">
+        <div class="contents">
+            {{if gt .revision 0}}
+            <article>
+                {{raw .html}}
+            </article>
+            {{else}}
+                <div class="page-not-found">
+                    <h3>This page is not created.</h3>
+                    <p><a href="/page/{{urlencode .pageName}}/modify" class="btn btn-info btn-lg">Create now</a></p>
+                </div>
+            {{end}}
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-4 sidebar">
+        <hr class="visible-xs-block">
+
+        {{if len_gt .recentCreatedPages 0}}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="/list/created_at"><i class="fa fa-plus"></i>Recent Created</a>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    {{range .recentCreatedPages}}
+                    <li>
+                        <a href="/page/{{urlencode .Title}}">{{.Title}}</a><br>
+                        <span class="created"><i class="fa fa-clock-o"></i> {{date "2006-01-02 15:04:05" .CreatedAt}}</span>
+                    </li>
+                    {{end}}
+                </ul>
+            </div>
+        </div>
+        {{end}}
+
+        {{if len_gt .recentUpdatedPages 0}}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="/list/created_at"><i class="fa fa-pencil"></i>Recent Updated</a>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    {{range .recentUpdatedPages}}
+                    <li>
+                        <a href="/page/{{urlencode .Title}}">{{.Title}}</a><br>
+                        <span class="created"><i class="fa fa-clock-o"></i> {{date "2006-01-02 15:04:05" .UpdatedAt}}</span>
+                    </li>
+                    {{end}}
+                </ul>
+            </div>
+        </div>
+        {{end}}
+    </div>
+</div>
+
+{{set . "footerPageRevision" .revision}}
+{{set . "footerPageUpdatedAt" .page.UpdatedAt}}
+
+{{template "footer.html" .}}

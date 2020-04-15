@@ -1,0 +1,24 @@
+{{ title := "Edit Post" }}
+{{ include "header.jet.html" }}
+<div class="container theme-showcase" role="main">
+  <div class="row">
+    <div class="col-sm-8 blog-main">
+
+      <div class="page-header">
+        <h1>Edit Post</h1>
+      </div>
+
+      {{ include "Post/_form.html" .}}
+
+      <a href="{{ .Post.Show .post.ID }}" class="btn btn-link btn-sm">Show</a>
+      <a href="{{ .Post.Index }}" class="btn btn-link btn-sm">Back</a>
+
+      <!-- bottom -->
+    </div>
+    <div id="blog-sidebar" class="col-sm-3 col-sm-offset-1 blog-sidebar">
+      {{ include "sidebar.jet.html" .}}
+    </div>
+
+  </div>
+</div>
+{{ include "footer.jet.html" .}}

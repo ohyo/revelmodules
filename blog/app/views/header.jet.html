@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>{{ title }}</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+  <link rel="shortcut icon" type="image/png" href="/public/img/favicon.png">
+
+  {* .moreStyles := "css/theme.css" *}
+  {* .moreStyles := "css/blog.css" *}
+
+  {{ if isset(.moreStyles) }}
+  {{range .moreStyles}}
+  <link rel="stylesheet" type="text/css" href="/public/{{.}}">
+  {{end}}
+  {{end}}
+
+  {{ if isset(.moreScripts) }}
+  {{range .moreScripts}}
+  <script src="/public/{{.}}" type="text/javascript" charset="utf-8"></script>
+  {{end}}
+  {{end}}
+</head>
+
+<body role="document" data-pinterest-extension-installed="cr1.35" data-feedly-mini="yes">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Jaehue' Blog</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Home</a></li>
+          {{ if isset(.Post) }}
+          <li><a href="{{ url(.Post.Index) }}">Post</a></li>
+          {{end}}
+          <li><a href="#contact">About</a></li>
+        </ul>
+        <div class="nav pull-right">
+          {{if .session}}
+          {{ if isset(.Post) }}
+          <p class="navbar-text"><a href="{{ url(.User.Edit) }}">{{.session.username}}</a></p>
+          {{end}}
+          {{else}}
+          {{ if .User }}
+          <p class="navbar-text"><a href="{{ url(.User.CreateSession) }}">Login</a></p>
+          {{end}}
+          {{end}}
+        </div>
+      </div>
+    </div>
+  </nav>
+  {{include "flash.jet.html" .}}

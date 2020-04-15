@@ -1,0 +1,11 @@
+      </div><!-- /.main -->
+      <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+        {{ include "sidebar.jet.html" }}
+      </div><!-- /.sidebar -->
+
+      </div>
+
+      {{if .RunMode == "dev"}}
+      {{ include "debug.html" .}}
+      {{end}}
+      {{ include "footer.jet.html" }}

@@ -1,0 +1,19 @@
+        <div class="page-footer clearfix">
+
+            {{if gt .footerPageRevision 0}}
+            <div class="page-revision">
+                <a href="/page/{{urlencode .pageName}}/revisions"><i class="fa fa-history"></i>Revision: #{{.footerPageRevision}} {{date "2006-01-02 15:04:05" .footerPageUpdatedAt}}</a>
+            </div>
+            {{end}}
+
+            <div class="poweredby">
+                <a href="https://github.com/yujiod/wiki" target="_blank">Powered by Wiki</a>
+            </div>
+        </div>
+    </div>
+
+    {{if eq .RunMode "dev"}}
+        {{template "debug.html" .}}
+    {{end}}
+    </body>
+</html>

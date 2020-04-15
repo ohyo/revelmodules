@@ -1,0 +1,42 @@
+{{ title := "Show Post" }}
+{{ include "header.jet.html" }}
+<div class="container theme-showcase" role="main">
+  <div class="row">
+    <div class="col-sm-8 blog-main">
+
+      <div class="blog-post">
+        <h2 class="blog-post-title">{{ .post.Title }}</h2>
+        <p class="blog-post-meta">{{ .post.CreatedAt }}</p>
+
+        <p>
+          {{.post.HtmlBody}}
+        </p>
+
+        {{if isset(.currentUser)}}
+        <!-- isAdmin-->
+        <a href="{{ .Post.Destroy .post.ID}}" class="btn btn-link btn-sm pull-right">Destroy</a>
+        <a href="{{ .Post.Edit .post.ID}}" class="btn btn-link btn-sm pull-right">Edit</a>
+        {{end}}
+      </div>
+
+      <hr>
+      {{ include "Comment/_comment.html" .}}
+      <hr>
+      <div class="well well-lg">
+        {{ include "Comment/_form.html" .}}
+      </div>
+
+      <nav>
+        <ul class="pager">
+          <li><a href="{{ .Post.Index }}">Back</a></li>
+        </ul>
+      </nav>
+      <!-- bottom -->
+    </div>
+    <div id="blog-sidebar" class="col-sm-3 col-sm-offset-1 blog-sidebar">
+      {{ include "sidebar.jet.html" .}}
+    </div>
+
+  </div>
+</div>
+{{ include "footer.jet.html" .}}

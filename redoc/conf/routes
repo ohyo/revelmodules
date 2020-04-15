@@ -1,0 +1,13 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET     /                                       Redoc.Index
+GET     /swagger.json                           Redoc.SwaggerJSON
+GET     /swagger.yaml                           Redoc.SwaggerYaml
+
+# Map static resources from the /app/public folder to the /public path
+#GET     /public/*filepath                       Static.Serve("public")
+
+# Catch all
+*       /:controller/:action                    :controller.:action

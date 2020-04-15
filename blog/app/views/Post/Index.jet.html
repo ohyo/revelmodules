@@ -1,0 +1,39 @@
+{{extends "Blog/Index.jet.html"}}
+{{block body()}}
+{{ title := "All Posts" }}
+{{ include "header.jet.html" }}
+<div class="container theme-showcase" role="main">
+  <div class="row">
+    <div class="col-sm-8 blog-main">
+
+      {{range .posts}}
+      <div class="blog-post">
+        <h2 class="blog-post-title"><a href="{{ .Post.Show .ID}}">{{.Title}}</a></h2>
+        <p class="blog-post-meta">{{ .CreatedAt }}</p>
+
+        <p>
+          {{.HtmlBody}}
+        </p>
+      </div>
+      {{end}}
+
+      {{if isset(.currentUser) }}
+      <!-- isAdmin-->
+      <nav>
+        <ul class="pager">
+          <li><a href="{{ .Post.New }}">New</a></li>
+        </ul>
+      </nav>
+      {{end}}
+
+      <!-- bottom -->
+    </div>
+    <div id="blog-sidebar" class="col-sm-3 col-sm-offset-1 blog-sidebar">
+      {{ include "sidebar.jet.html" .}}
+    </div>
+
+  </div>
+</div>
+{{ include "footer.jet.html" }}
+
+{{end}}
