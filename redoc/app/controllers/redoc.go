@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"github.com/revel/revel"
-	"github.com/swaggo/swag"
-	"github.com/swaggo/swag/gen"
+	"fmt"
 	"os"
-)
 
+	"github.com/ohyo/revelmodules/redoc/app/swag"
+	"github.com/ohyo/revelmodules/redoc/app/swag/gen"
+	"github.com/revel/revel"
+)
 
 // Redoc is
 type Redoc struct {
@@ -18,27 +19,31 @@ func init() {
 }
 
 func exists(name string) bool {
-    if _, err := os.Stat(name); err != nil {
-        if os.IsNotExist(err) {
-            return false
-        }
-    }
-    return true
+	if _, err := os.Stat(name); err != nil {
+		if os.IsNotExist(err) {
+			return false
+		}
+	}
+	return true
 }
 
-func refreshSwagger() {	
-	if revel.DevMode && exists(revel.AppPath + "/init.go") {
+func refreshSwagger() {
+	fmt.Println("REFRESH SWAGGER")
+	if revel.DevMode && exists(revel.AppPath+"/init.go") {
 		err := gen.New().Build(&gen.Config{
-			SearchDir:          revel.AppPath,
-			MainAPIFile:        "init.go",
+			SearchDir: revel.AppPath,
+			// SearchDirs:         []string{revel.AppPath, "/mnt/work/GO/src/github.com/ohyo/revelmodules/api/app"},
+			MainAPIFile:        "swagger.go",
 			PropNamingStrategy: swag.CamelCase,
-			OutputDir:          revel.BasePath + "/docs",
+			OutputDir:          revel.BasePath + "/public",
 			ParseVendor:        false,
 		})
 
 		if err != nil {
 			revel.AppLog.Error(err.Error())
 		}
+	} else {
+		fmt.Println("SOME WRONG WITH SWAGGER")
 	}
 }
 
@@ -50,14 +55,14 @@ func (ctrl Redoc) Index() revel.Result {
 
 // SwaggerJSON is
 func (ctrl Redoc) SwaggerJSON() revel.Result {
-	filename := revel.BasePath + "/docs/swagger.json"
+	filename := revel.BasePath + "/public/swagger.json"
 	ctrl.Response.ContentType = "application/json"
 	return ctrl.RenderFileName(filename, revel.NoDisposition)
 }
 
 // SwaggerYaml is
 func (ctrl Redoc) SwaggerYaml() revel.Result {
-	filename := revel.BasePath + "/docs/swagger.yaml"
+	filename := revel.BasePath + "/public/swagger.yaml"
 	ctrl.Response.ContentType = "application/xml"
 	return ctrl.RenderFileName(filename, revel.NoDisposition)
 }

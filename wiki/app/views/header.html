@@ -23,8 +23,8 @@
         <script src="{{.}}" type="text/javascript" charset="utf-8"></script>
         {{end}}
 
-        <link rel="stylesheet" href="/public/wiki/css/common.css">
-        <script src="/public/wiki/js/common.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="{{url `static.servemodule(wiki,public)` `css`}}/common.css">
+        <script src="{{url `static.servemodule(wiki,public)` `js`}}/common.js" type="text/javascript" charset="utf-8"></script>
 
     </head>
     <body role="document">

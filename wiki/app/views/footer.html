@@ -2,7 +2,7 @@
 
             {{if gt .footerPageRevision 0}}
             <div class="page-revision">
-                <a href="/page/{{urlencode .pageName}}/revisions"><i class="fa fa-history"></i>Revision: #{{.footerPageRevision}} {{date "2006-01-02 15:04:05" .footerPageUpdatedAt}}</a>
+                <a href="{{url `Page.Revisions` .pageName}}"><i class="fa fa-history"></i>Revision: #{{.footerPageRevision}} {{date "2006-01-02 15:04:05" .footerPageUpdatedAt}}</a>
             </div>
             {{end}}
 

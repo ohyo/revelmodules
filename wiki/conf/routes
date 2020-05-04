@@ -2,29 +2,21 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-module:testrunner
-
-GET     /                                       Page.Show
+GET     /                                                                       Page.Index
 
 # Ignore favicon requests
-GET     /favicon.ico                            404
+GET     /favicon.ico                                                            404
 
 # Map static resources from the /app/public folder to the /public path
-# GET     /public/wiki/*filepath                  Static.Serve("public")
-GET     /public/*filepath                  _LOCAL_.static\Static.Serve("public")
-
-# Page
-GET     /page                                   Page.Show
-GET     /page/:pageName                         Page.Show
-GET     /page/:pageName/modify                  Page.Modify
-POST    /page/:pageName/modify                  Page.Save
-GET     /page/:pageName/revisions               Page.Revisions
-GET     /page/:pageName/diff/:revisionId        Page.Diff
+GET     /public/*filepath                                                       Static.ServeModule(wiki,public)
 
 # List
-GET     /list                                   List.Index
-GET     /list/:order                            List.Index
+GET     /list                                                                   List.Index
+GET     /list/:order                                                            List.Index
 
-# Catch all
-*       /:controller                            :controller.Index
-*       /:controller/:action                    :controller.:action
+# Page
+GET     /:pageName                                                              Page.Show
+GET     /:pageName/modify                                                       Page.Modify
+POST    /:pageName/modify                                                       Page.Save
+GET     /:pageName/revisions                                                    Page.Revisions
+GET     /:pageName/diff/:revisionId                                             Page.Diff

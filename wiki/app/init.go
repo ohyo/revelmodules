@@ -1,6 +1,13 @@
 package app
 
-import "github.com/revel/revel"
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"github.com/ohyo/revelmodules/wiki/app/models"
+	"github.com/revel/revel"
+)
 
 func init() {
 	// Filters is the default set of global filters.
@@ -19,12 +26,12 @@ func init() {
 		revel.ActionInvoker,           // Invoke the action.
 	}
 
-	// register startup functions with OnAppStart
-	// ( order dependent )
-	// revel.OnAppStart(InitDB())
+	// register startup functions with OnAppStart ( order dependent )
+	revel.OnAppStart(InitDB)
 	// revel.OnAppStart(FillCache())
 }
 
+// HeaderFilter is
 // TODO turn this into revel.HeaderFilter
 // should probably also have a filter for CSRF
 // not sure if it can go in the same filter or not
@@ -35,4 +42,14 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 	c.Response.Out.Header().Add("X-Content-Type-Options", "nosniff")
 
 	fc[0](c, fc[1:]) // Execute the next filter stage.
+}
+
+// InitDB is
+func InitDB() {
+	dataDir := filepath.Join(revel.BasePath, "data", "wiki")
+	if err := models.InitBadgerDB(dataDir); err != nil {
+		fmt.Println(err.Error())
+		revel.AppLog.Errorf(err.Error())
+		os.Exit(1)
+	}
 }

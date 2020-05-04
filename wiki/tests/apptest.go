@@ -2,20 +2,24 @@ package tests
 
 import "github.com/revel/revel/testing"
 
-type AppTest struct {
+// WikiTest is
+type WikiTest struct {
 	testing.TestSuite
 }
 
-func (t *AppTest) Before() {
-	println("Set up")
+// Before is
+func (t *WikiTest) Before() {
+	println("Wiki Set up")
 }
 
-func (t *AppTest) TestThatIndexPageWorks() {
+// TestThatWikiIndexPageWorks is
+func (t *WikiTest) TestThatWikiIndexPageWorks() {
 	t.Get("/")
 	t.AssertOk()
 	t.AssertContentType("text/html; charset=utf-8")
 }
 
-func (t *AppTest) After() {
-	println("Tear down")
+// After is
+func (t *WikiTest) After() {
+	println("Wiki Tear down")
 }

@@ -107,9 +107,9 @@ func (engine *JetEngine) ConvertPath(path string) string {
 func (engine *JetEngine) Handles(templateView *revel.TemplateView) bool {
 	engine.view.AddPath(templateView.BasePath)
 	can := revel.EngineHandles(engine, templateView)
-	if can {
-		revel.AppLog.Infof("JET CAN HANDLE: [%t] %s", can, templateView.TemplateName)
-	}
+	// if can {
+	// 	revel.AppLog.Infof("JET CAN HANDLE: [%t] %s", can, templateView.TemplateName)
+	// }
 	return can
 }
 
@@ -118,7 +118,7 @@ func (engine *JetEngine) ParseAndAdd(templateView *revel.TemplateView) error {
 	// revel.AppLog.Infof("JET PARSE AND ADD: [%s] [%s]", templateView.TemplateName, templateView.BasePath)
 	// Jet templates must only render views specified for it (no trial and error)
 	if templateView.EngineType != ENGINE_NAME {
-		// revel.AppLog.Info("JET WRONG ENGINE TYPE: [" + templateView.EngineType + "]")
+		// revel.AppLog.Info("JET WRONG ENGINE TYPE: [" + templateView.FilePath + " " + templateView.TemplateName + "]")
 		return &revel.Error{
 			Title:       "Template Compilation Error",
 			Path:        templateView.FilePath,
@@ -133,7 +133,7 @@ func (engine *JetEngine) ParseAndAdd(templateView *revel.TemplateView) error {
 		revel.AppLog.Error(err.Error())
 		return err
 	}
-	revel.AppLog.Info("JET ADD " + templateView.TemplateName)
+	// revel.AppLog.Info("JET ADD " + templateView.TemplateName)
 	engine.templates[templateView.TemplateName] = &JetTemplate{
 		// engine: engine,
 		TemplateView: templateView,
@@ -147,7 +147,7 @@ func (engine *JetEngine) ParseAndAdd(templateView *revel.TemplateView) error {
 // Lookup is
 func (engine *JetEngine) Lookup(templateName string) revel.Template {
 	if tpl, found := engine.templates[templateName]; found {
-		revel.AppLog.Info("JET FOUND: " + templateName)
+		// revel.AppLog.Info("JET FOUND: " + templateName)
 		return tpl
 	}
 	return nil

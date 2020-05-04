@@ -16,15 +16,14 @@ import (
 	"github.com/revel/revel"
 )
 
+// Page is
 type Page struct {
 	App
 	NeedRecaptcha bool
 }
 
-// Show page
-func (ctrl Page) Show() revel.Result {
-	pageName := ctrl.Params.Get("pageName")
-
+// Index page
+func (ctrl Page) Index() revel.Result {
 	router := revel.MainRouter
 	route := router.Route(ctrl.Request)
 	controllertype := route.TypeOfController
@@ -36,18 +35,18 @@ func (ctrl Page) Show() revel.Result {
 	fmt.Println("NAMESPACE", controllertype.Namespace, "PATH", path, "IMPORTPATH", importpath, "NAMESPACE", namespace, "NAME [", route.ModuleSource.Name, "]")
 
 	// Home if no page name is specified
-	if pageName == "" {
-		pageName = "Home"
-	}
+	pageName := "Home"
 
 	// Search by page name or page ID
-	page := models.Page{}
+	page := models.Page{
+		Title: pageName,
+	}
 	ctrl.db.Where("id = ?", pageName).Or("title = ?", pageName).First(&page)
 
 	// If page ID is specified and exists, redirect to URL of page name
 	id, _ := strconv.Atoi(pageName)
 	if id != 0 && page.Id == id {
-		return ctrl.Redirect("/page/" + wikihelper.UrlEncode(page.Title))
+		return ctrl.Redirect("/wiki/" + wikihelper.UrlEncode(page.Title))
 	}
 
 	// Render Markdown
@@ -66,17 +65,48 @@ func (ctrl Page) Show() revel.Result {
 	recentUpdatedPages := []models.Page{}
 	ctrl.db.Where("created_at != updated_at").Order("updated_at desc").Limit(10).Find(&recentUpdatedPages)
 
-	for k, _ := range ctrl.ViewArgs {
-		fmt.Println(k)
+	return ctrl.Render(pageName, body, html, page, revision, recentCreatedPages, recentUpdatedPages)
+}
+
+// Show page
+func (ctrl Page) Show(pageName string) revel.Result {
+	// Search by page name or page ID
+	page := models.Page{
+		Title: pageName,
 	}
+	ctrl.db.Where("id = ?", pageName).Or("title = ?", pageName).First(&page)
+
+	// If page ID is specified and exists, redirect to URL of page name
+	id, _ := strconv.Atoi(pageName)
+	if id != 0 && page.Id == id {
+		return ctrl.Redirect("/wiki/" + wikihelper.UrlEncode(page.Title))
+	}
+
+	// Render Markdown
+	body := page.Body
+	html := wikihelper.Render(body)
+
+	// Get revision number
+	revision := 0
+	ctrl.db.Model(models.Revision{}).Where("page_id = ?", page.Id).Count(&revision)
+
+	// Get a list of recently registered pages
+	recentCreatedPages := []models.Page{}
+	ctrl.db.Order("created_at desc").Limit(10).Find(&recentCreatedPages)
+
+	// Get recently updated page list
+	recentUpdatedPages := []models.Page{}
+	ctrl.db.Where("created_at != updated_at").Order("updated_at desc").Limit(10).Find(&recentUpdatedPages)
 
 	return ctrl.Render(pageName, body, html, page, revision, recentCreatedPages, recentUpdatedPages)
 }
 
-// Edit page
+// Modify is Edit page
 func (ctrl Page) Modify(pageName string) revel.Result {
 	// Search by page name
-	page := models.Page{}
+	page := models.Page{
+		Title: pageName,
+	}
 	ctrl.db.Where("title = ?", pageName).First(&page)
 
 	// Generate hash for collision detection
@@ -101,10 +131,13 @@ func (ctrl Page) Modify(pageName string) revel.Result {
 	return ctrl.Render(pageName, hash, page, token, recaptchaSiteKey)
 }
 
-// Register or update the page
+// Save is register or update the page
 func (ctrl Page) Save(pageName string) revel.Result {
 	// Search by page name
-	page := models.Page{}
+	page := models.Page{
+		Title: pageName,
+	}
+
 	ctrl.db.Where("title = ?", pageName).First(&page)
 
 	// Get the body sent by POST
@@ -112,7 +145,7 @@ func (ctrl Page) Save(pageName string) revel.Result {
 
 	// Do not update if page exists but has no changes
 	if page.Id > 0 && page.Body == body {
-		return ctrl.Redirect("/page/" + wikihelper.UrlEncode(page.Title))
+		return ctrl.Redirect("/wiki/" + wikihelper.UrlEncode(page.Title))
 	}
 
 	// CSRF
@@ -166,8 +199,8 @@ func (ctrl Page) Save(pageName string) revel.Result {
 
 	// Count added and deleted lines
 	revision := models.Revision{}
-	for i, line := range diffLines {
-		if i > 2 {
+	for idx, line := range diffLines {
+		if idx > 2 {
 			if strings.HasPrefix(line, "+") {
 				revision.AddedLines++
 			}
@@ -183,13 +216,15 @@ func (ctrl Page) Save(pageName string) revel.Result {
 	revision.PageId = page.Id
 	ctrl.db.Save(&revision)
 
-	return ctrl.Redirect("/page/" + wikihelper.UrlEncode(pageName))
+	return ctrl.Redirect("/wiki/" + wikihelper.UrlEncode(pageName))
 }
 
-// Display a list of page revisions
+// Revisions display a list of page revisions
 func (ctrl Page) Revisions(pageName string) revel.Result {
 	// Search by page name
-	page := models.Page{}
+	page := models.Page{
+		Title: pageName,
+	}
 	ctrl.db.Where("title = ?", pageName).First(&page)
 
 	revisions := []models.Revision{}
@@ -200,20 +235,22 @@ func (ctrl Page) Revisions(pageName string) revel.Result {
 	return ctrl.Render(pageName, revisions, revisionSize)
 }
 
-// Show diff between specified revision id and previous revision
+// Diff show difference between specified revision id and previous revision
 // It is assumed to be requested by Ajax
-func (ctrl Page) Diff(pageName string, revisionId string) revel.Result {
+func (ctrl Page) Diff(pageName string, revisionID string) revel.Result {
 	// Search by page name
-	page := models.Page{}
+	page := models.Page{
+		Title: pageName,
+	}
 	ctrl.db.Where("title = ?", pageName).First(&page)
 
 	// Get latest revision
 	revision := models.Revision{}
-	ctrl.db.Where("page_id = ? and id = ?", page.Id, revisionId).First(&revision)
+	ctrl.db.Where("page_id = ? and id = ?", page.Id, revisionID).First(&revision)
 
 	// Get revision immediately before latest revision
 	previous := models.Revision{}
-	ctrl.db.Where("page_id = ? and id < ?", page.Id, revisionId).Order("id desc").First(&previous)
+	ctrl.db.Where("page_id = ? and id < ?", page.Id, revisionID).Order("id desc").First(&previous)
 
 	// Generate difference
 	unifiedDiff := difflib.UnifiedDiff{

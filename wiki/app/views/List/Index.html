@@ -9,9 +9,9 @@
 {{template "flash.html" .}}
 
 <ul class="nav nav-tabs">
-    <li {{if eq .order "title"}}class="active"{{end}}><a href="/list">By alphabetical</a></li>
-    <li {{if eq .order "created_at"}}class="active"{{end}}><a href="/list/created_at">By created</a></li>
-    <li {{if eq .order "updated_at"}}class="active"{{end}}><a href="/list/updated_at">By modified</a></li>
+    <li {{if eq .order "title"}}class="active"{{end}}><a href="{{url `List.Index` ``}}">By alphabetical</a></li>
+    <li {{if eq .order "created_at"}}class="active"{{end}}><a href="{{url `List.Index` `created_at`}}">By created</a></li>
+    <li {{if eq .order "updated_at"}}class="active"{{end}}><a href="{{url `List.Index` `updated_at`}}">By modified</a></li>
 </ul>
 
 <div class="page-list">
@@ -26,7 +26,7 @@
     <ul class="pages">
         {{range .pages}}
         <li>
-            <h4><a href="/page/{{urlencode .Title}}">{{.Title}}</a></h4>
+            <h4><a href="{{url `Page.Show` .Title}}">{{.Title}}</a></h4>
             <span class="created"><i class="fa fa-plus"></i> {{date "2006-01-02 15:04" .CreatedAt}}</span>
             <span class="modified"><i class="fa fa-pencil"></i> {{date "2006-01-02 15:04" .UpdatedAt}}</span>
         </li>
@@ -36,15 +36,27 @@
     {{if ne .paginateLast 1}}
     <ul class="pagination">
         {{$prev := subtract .paginateCurrent 1}}
-        <li {{if eq .paginateCurrent 1}}class="disabled"{{end}}><a href="/list/{{$.order}}?{{if ne $.query ""}}query={{.query}}&amp;{{end}}page={{$prev}}"><span>&laquo;</span></a></li>
+        <li {{if eq .paginateCurrent 1}}class="disabled"{{end}}>
+          <a href="{{url `List.Index` $.order}}?{{if ne $.query ``}}query={{.query}}&amp;{{end}}page={{$prev}}">
+            <span>&laquo;</span>
+          </a>
+        </li>
 
         {{range $i, $val := .paginatePages}}
         {{$p := add $i 1}}
-        <li {{if eq $.paginateCurrent $p}}class="active"{{end}}><a href="/list/{{$.order}}?{{if ne $.query ""}}query={{$.query}}&amp;{{end}}page={{$p}}"><span>{{$p}}</a></span></a></li>
+        <li {{if eq $.paginateCurrent $p}}class="active"{{end}}>
+          <a href="{{url `List.Index` $.order}}?{{if ne $.query ``}}query={{$.query}}&amp;{{end}}page={{$p}}">
+            <span>{{$p}}</span>
+          </a>
+        </li>
         {{end}}
 
         {{$next := add .paginateCurrent 1}}
-        <li {{if eq .paginateCurrent .paginateLast}}class="disabled"{{end}}><a href="/list/{{$.order}}?{{if ne $.query ""}}query={{.query}}&amp;{{end}}page={{$next}}"><span>&raquo;</span></a></li>
+        <li {{if eq .paginateCurrent .paginateLast}}class="disabled"{{end}}>
+          <a href="{{url `List.Index` $.order}}?{{if ne $.query ``}}query={{.query}}&amp;{{end}}page={{$next}}">
+            <span>&raquo;</span>
+          </a>
+        </li>
     </ul>
     {{end}}
 </div>

@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"github.com/revel/revel"
 	"github.com/ohyo/revelmodules/blog/app/models"
 	"github.com/ohyo/revelmodules/blog/app/routes"
+	"github.com/revel/revel"
 )
 
 // Comment is

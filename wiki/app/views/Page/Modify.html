@@ -4,7 +4,7 @@
 {{append . "moreScripts" "//cdnjs.cloudflare.com/ajax/libs/codemirror/4.4.0/addon/mode/overlay.js"}}
 {{append . "moreScripts" "//cdnjs.cloudflare.com/ajax/libs/codemirror/4.4.0/mode/gfm/gfm.js"}}
 {{append . "moreScripts" "//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"}}
-{{append . "moreScripts" "/public/js/editor.js"}}
+{{append . "moreScripts" "/wiki/public/js/editor.js"}}
 {{append . "moreScripts" "//www.google.com/recaptcha/api.js"}}
 {{append . "moreStyles" "//cdnjs.cloudflare.com/ajax/libs/codemirror/4.4.0/codemirror.min.css"}}
 
@@ -12,10 +12,10 @@
 
 {{set . "action" "modify"}}
 
-<form method="POST" action="/page/{{urlencode .pageName}}/modify">
+<form method="POST" action="{{url `Page.Modify` .pageName}}">
 
     <div class="page-header clearfix">
-        <a href="/page/{{urlencode .pageName}}" class="btn btn-default btn-sm btn-back"><i class="fa fa-arrow-left"></i></a>
+        <a href="{{url `Page.Show` .pageName}}" class="btn btn-default btn-sm btn-back"><i class="fa fa-arrow-left"></i></a>
         <h1>Editing: {{.pageName}}</h1>
         {{template "Page/actions.html" .}}
         {{if ne .recaptchaSiteKey ""}}
